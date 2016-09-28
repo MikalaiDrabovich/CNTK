@@ -62,14 +62,6 @@
 #define let const auto
 #endif
 
-// TODO: Temporary mechanism to enable memory sharing for
-// node output value matrices. This will go away when the
-// sharing is ready to be enabled by default
-bool g_shareNodeValueMatrices = false;
-// TODO: The keywork to enable memory manager. And hope it will
-// be the default ability someone and this keyword go away.
-bool g_hyperCompressMemory = false;
-
 using namespace std;
 using namespace Microsoft::MSR;
 using namespace Microsoft::MSR::CNTK;
@@ -222,9 +214,6 @@ void DoCommands(const ConfigParameters& config, const shared_ptr<MPIWrapper>& mp
         {
             ProgressTracing::SetStepOffset(fullEpochsOffset); // this is the epoch number that SGD will log relative to
         }
-
-        // The hyperCompressMemory mechianism is built on CachedResize of Matrix.cpp, a static function to active it
-        Matrix<ElemType>::SetUseCachedMatrixBuffer(g_hyperCompressMemory);
 
         // determine the action to perform, and do it
         for (int j = 0; j < action.size(); j++)
@@ -527,8 +516,10 @@ int wmainWithBS(int argc, wchar_t* argv[]) // called from wmain which is a wrapp
     if (paralleltrain)
         mpi = MPIWrapper::GetInstance(true /*create*/);
 
-    g_shareNodeValueMatrices = config(L"shareNodeValueMatrices", false);
-    g_hyperCompressMemory = config(L"hyperCompressMemory", false);
+    if (config(L"shareNodeValueMatrices", false))
+        Globals::EnableShareNodeValueMatrices();
+    if (config(L"hyperCompressMemory", false))
+        Globals::EnableHyperCompressMemory();
 
     TracingGPUMemoryAllocator::SetTraceLevel(config(L"traceGPUMemoryAllocations", 0));
 
@@ -646,8 +637,10 @@ int wmainOldCNTKConfig(int argc, wchar_t* argv[])
     if (paralleltrain)
         mpi = MPIWrapper::GetInstance(true /*create*/);
 
-    g_shareNodeValueMatrices = config(L"shareNodeValueMatrices", false);
-    g_hyperCompressMemory = config(L"hyperCompressMemory", false);
+    if (config(L"shareNodeValueMatrices", false))
+        Globals::EnableShareNodeValueMatrices();
+    if (config(L"hyperCompressMemory", false))
+        Globals::EnableHyperCompressMemory();
 
     TracingGPUMemoryAllocator::SetTraceLevel(config(L"traceGPUMemoryAllocations", 0));
 

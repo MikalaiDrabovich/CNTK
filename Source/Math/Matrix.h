@@ -74,10 +74,6 @@ private:
     mutable size_t m_numTimesMatrixTypeChanged;
     mutable int m_devicesTransferedTo[2]; // TODO: what is this for? Seems only diagnostics
 
-    // To enable cachedMatrixBuffer or not. If setting to true, 
-    // the Resize of Matrix will replace by CachedResize, for now, it just work for GPU
-    static bool m_useCachedMatrixBuffer;
-
     // Moves matrix from device id_from to device with id_to. This method doesn't change preferred device Id
     void _transferFromDeviceToDevice(int id_from, int id_to, bool isBeingMoved = true, bool emptyTransfer = false) const;
     // Moves matrix from current device to device with id_to. This method doesn't change preferred device Id
@@ -111,9 +107,6 @@ public:
     // inadvertent silent deep copying
     Matrix(const Matrix<ElemType>& deepCopyFrom) = delete;
     Matrix<ElemType>& operator=(const Matrix<ElemType>& deepCopyFrom) = delete;
-
-    static void SetUseCachedMatrixBuffer(bool useCachedMatrixBuffer);
-    static bool GetUseCachedMatrixBuffer();
 
     static Matrix<ElemType> Ones(const size_t rows, const size_t cols, DEVICEID_TYPE deviceId);
     static Matrix<ElemType> Zeros(const size_t rows, const size_t cols, DEVICEID_TYPE deviceId);
