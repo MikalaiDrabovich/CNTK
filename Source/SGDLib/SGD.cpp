@@ -716,7 +716,7 @@ void SGD<ElemType>::TrainOrAdaptModel(int startEpoch, ComputationNetworkPtr net,
                 auto modelName = GetModelNameForEpoch(i);
                 if (m_traceLevel > 0)
                     LOGPRINTF(stderr, "SGD: Saving checkpoint model '%ls'\n", modelName.c_str());
-                net->Save(modelName);
+                net->Save(modelName, FileOptions::fileOptionsText);
                 if (!m_keepCheckPointFiles)
                 {
                     // delete previous checkpoint file to save space
