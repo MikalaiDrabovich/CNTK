@@ -126,7 +126,7 @@ RUN mv /bin/sh /bin/sh.orig && \
 
 WORKDIR /cntk
 
-RUN git clone --depth=1 -b master https://github.com/Microsoft/CNTK.git . && \
+RUN git clone --depth=1 -b master https://github.com/MikalaiDrabovich/CNTK.git . && \
     CONFIGURE_OPTS="\
       --with-cuda=/usr/local/cuda \
       --with-gdk-include=/usr/local/cuda/include \
